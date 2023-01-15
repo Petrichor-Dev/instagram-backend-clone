@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\Post;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,58 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+
+// registrasi
+
+Route::get('/signin', function(){
+  return 'signin';
 });
+
+Route::get('/signup', function(){
+  return 'signup';
+});
+
+
+// users
+Route::get('/users', function(){
+  return 'get user';
+});
+
+Route::post('/users', function(){
+  return 'add user';
+});
+
+Route::patch('/users', function(){
+  return 'update user';
+});
+
+Route::delete('/users', function(){
+  return 'delete user';
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// asd
