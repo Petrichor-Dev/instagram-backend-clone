@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\Post;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,32 +21,15 @@ use App\Models\Post;
 
 
 // registrasi
-
-Route::get('/signin', function(){
-  return 'signin';
-});
-
-Route::get('/signup', function(){
-  return 'signup';
-});
+Route::post('signin', [UserController::class, 'signin']);
+Route::post('signup', [UserController::class, 'signup']);
 
 
 // users
-Route::get('/users', function(){
-  return 'get user';
-});
-
-Route::post('/users', function(){
-  return 'add user';
-});
-
-Route::patch('/users', function(){
-  return 'update user';
-});
-
-Route::delete('/users', function(){
-  return 'delete user';
-});
+Route::get('users/', [UserController::class, 'get']);
+Route::get('users/{id}', [UserController::class, 'get']);
+Route::patch('users/{id}', [UserController::class, 'update']);
+Route::delete('users/{id}', [UserController::class, 'delete']);
 
 
 
