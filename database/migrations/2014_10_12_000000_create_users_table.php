@@ -19,11 +19,10 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone_number');
-            $table->string('image_path');
-            $table->string('email')->unique();
+            $table->string('image_path')->nullable();
             $table->string('password');
+            $table->date('date_of_birth')->nullable();
             // $table->rememberToken();
-            $table->timestamp('deleted_at');
             $table->timestamps();
         });
     }

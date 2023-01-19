@@ -24,12 +24,12 @@ use App\Http\Controllers\UserController;
 Route::post('signin', [UserController::class, 'signin']);
 Route::post('signup', [UserController::class, 'signup']);
 
-
 // users
-Route::get('users/', [UserController::class, 'get']);
-Route::get('users/{id}', [UserController::class, 'get']);
+Route::post('users/', [UserController::class, 'get']);
+Route::post('users/{id}', [UserController::class, 'get']);
 Route::patch('users/{id}', [UserController::class, 'update']);
 Route::delete('users/{id}', [UserController::class, 'delete']);
+
 
 
 
