@@ -12,18 +12,20 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
 
-  public function signup(Request $request)
+
+//============================================SIGNIN============================================
+  public function signup()
   {
     $rules = ['username' => 'required|alpha|min:2|max:32',
               'first_name' => 'required|alpha|min:2|max:16',
               'last_name' => 'required|alpha|min:2|max:16',
               'phone_number' => 'required|numeric|min_digits:10|max_digits:12',
               'image_path' => '',
-              'date_of_birth' => '',
+              'date_of_birth' => 'required|date_format:Y-m-d',
               'password' => 'required|min:5'];
 
     //validasi data
-    $validator = Validator::make($request->all(), $rules);
+    $validator = Validator::make(request()->all(), $rules);
 
     //cek jika ada validasi yang gagal
     if ($validator->fails())
@@ -43,7 +45,7 @@ class UserController extends Controller
 
     //insert data
     try {
-      $user = User::create($request->all());
+      $user = User::create(request()->all());
       return ApiResponse::response(true, 200, 'signin berhasil. silahkan login');
 
     } catch (\Exception $e) {
@@ -52,14 +54,15 @@ class UserController extends Controller
 
   }
 
+
 //============================================SIGNIN============================================
-  public function signin(Request $request)
+  public function signin()
   {
     $rules = ['username' => 'required|alpha_dash|min:2|max:32',
               'password' => 'required|min:5'];
 
     //validasi data
-    $validator = Validator::make($request->all(), $rules);
+    $validator = Validator::make(request()->all(), $rules);
 
     //cek jika ada validasi yang gagal
     if ($validator->fails())
@@ -82,36 +85,75 @@ class UserController extends Controller
     return ApiResponse::response(false, 400, 'login gagal');
   }
 
-//============================================SIGNIN============================================
-  public function get(Request $request, $id = null)
-  {
-    if($id)
-    {
-      try {
-        $usersData = User::find($id)->all();
-        return ApiResponse::response(true, 200, 'get all data berhasil', $usersData);
-      } catch (\Exception $e) {
-        return ApiResponse::response(false, 400, 'get data by id gagal');
-      }
-    }
 
+//============================================SIGNIN============================================
+  public function index()
+  {
     try {
-      $usersData = User::get(['username','password']);
+      $usersData = User::get(['id', 'username','password', 'first_name', 'last_name', 'phone_number', 'image_path', 'date_of_birth', 'password']);
+      if(!$usersData->isEmpty()){
+        return ApiResponse::response(true, 200, 'get all data berhasil', $usersData);
+      } else {
+        return ApiResponse::response(true, 200, 'get all data berhasil - [data masih kosong]', $usersData);
+      }
+    } catch (\Exception $e) {
+      return ApiResponse::response(false, 400, 'get data by id gagal');
+    }
+  }
+
+
+
+//============================================SIGNIN============================================
+  public function show($id)
+  {
+    try {
+      $usersData = User::where('id', $id)->get(['id', 'username','password', 'first_name', 'last_name', 'phone_number', 'image_path', 'date_of_birth', 'password']);
       return ApiResponse::response(true, 200, 'get all data berhasil', $usersData);
     } catch (\Exception $e) {
       return ApiResponse::response(false, 400, 'get data by id gagal');
     }
   }
 
-//============================================SIGNIN============================================
-  public function delete(Request $request, $id)
-  {
-    return $id;
-  }
+
 //============================================SIGNIN============================================
   public function update($id)
   {
-    return $id;
+    $rules = ['username' => 'alpha|min:2|max:32',
+              'first_name' => 'alpha|min:2|max:16',
+              'last_name' => 'alpha|min:2|max:16',
+              'phone_number' => 'numeric|min_digits:10|max_digits:12',
+              'image_path' => '',
+              'date_of_birth' => 'date_format:Y-m-d',
+              'password' => 'min:5'];
+
+    //validasi data
+    $validator = Validator::make(request()->all(), $rules);
+
+    //cek jika ada validasi yang gagal
+    if ($validator->fails())
+    {
+      return ApiResponse::response(false, 400, $validator->errors());
+    }
+
+    try {
+      User::where('id', $id)->update(request()->all());
+      return ApiResponse::response(true, 200, 'update berhasil');
+
+    } catch (\Exception $e) {
+      return ApiResponse::response(false, 400, 'ups there is something wrong', $e);
+    }
   }
 
+
+//============================================SIGNIN============================================
+  public function destroy($id)
+  {
+    try {
+      User::where('id', $id)->delete();
+      return ApiResponse::response(true, 200, 'delete berhasil');
+
+    } catch (\Exception $e) {
+      return ApiResponse::response(false, 400, 'ups there is something wrong', $e);
+    }
+  }
 }

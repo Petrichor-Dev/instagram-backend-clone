@@ -27,10 +27,10 @@ Route::post('signin', [UserController::class, 'signin']);
 Route::post('signup', [UserController::class, 'signup']);
 
 // users
-Route::post('users/', [UserController::class, 'get']);
-Route::post('users/{id}', [UserController::class, 'get']);
+Route::get('users/', [UserController::class, 'index']);
+Route::get('users/{id}', [UserController::class, 'show']);
 Route::patch('users/{id}', [UserController::class, 'update']);
-Route::delete('users/{id}', [UserController::class, 'delete']);
+Route::delete('users/{id}', [UserController::class, 'destroy']);
 
 //comments
 Route::post('comments/', [CommentController::class, 'store']);
