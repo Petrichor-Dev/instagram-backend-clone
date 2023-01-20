@@ -9,11 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class PostsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+//============================================INDEX============================================
     public function index()
     {
       try {
@@ -24,12 +20,8 @@ class PostsController extends Controller
       }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
+//============================================STORE============================================
     public function store()
     {
       $rules = ['user_id' => 'required|numeric|max:5',
@@ -54,12 +46,8 @@ class PostsController extends Controller
       }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+//============================================SHOW============================================
     public function show($id)
     {
       try {
@@ -70,13 +58,8 @@ class PostsController extends Controller
       }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+//============================================UPDATE============================================
     public function update($id)
     {
       $rules = ['caption' => 'max:100',
@@ -100,12 +83,8 @@ class PostsController extends Controller
       }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+  //============================================DESTROY============================================
     public function destroy($id)
     {
       try {

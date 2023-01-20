@@ -9,73 +9,95 @@ use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
+//============================================INDEX============================================
     public function index()
     {
-        return 'get all';
+      try {
+        $postData = Comment::get(['id', 'user_id','post_id', 'comment_text']);
+        return ApiResponse::response(true, 200, 'get all data berhasil', $postData);
+      } catch (\Exception $e) {
+        return ApiResponse::response(false, 400, 'get data gagal');
+      }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+//============================================STORE============================================
+    public function store()
     {
-      $rules = ['username' => 'required|alpha|min:2|max:32',
-                'first_name' => 'required|alpha|min:2|max:16',
-                'last_name' => 'required|alpha|min:2|max:16',
-                'phone_number' => 'required|numeric|min_digits:10|max_digits:12',
-                'image_path' => '',
-                'date_of_birth' => '',
-                'password' => 'required|min:5'];
+      $rules = ['post_id' => 'required|numeric',
+                'user_id' => 'required|numeric',
+                'comment_text' => 'required|max:255'];
 
       //validasi data
-      $validator = Validator::make($request->all(), $rules);
+      $validator = Validator::make(request()->all(), $rules);
 
       //cek jika ada validasi yang gagal
       if ($validator->fails())
       {
         return ApiResponse::response(false, 400, $validator->errors());
       }
+
+      try {
+        Comment::create(request()->all());
+        return ApiResponse::response(true, 200, 'comment berhasil di tambahkan');
+
+      } catch (\Exception $e) {
+        return ApiResponse::response(false, 400, 'ups there is something wrong', $e);
+      }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+//============================================SHOW============================================
     public function show($id)
     {
-        return 'get by id {'.$id.'}';
+
+      //bisa get by id comment, get by id post, atau get by id user
+      try {
+        $postData = Comment::where('id', $id)->get(['id', 'user_id','post_id', 'comment_text']);
+        return ApiResponse::response(true, 200, 'get data by id berhasil', $postData);
+      } catch (\Exception $e) {
+        return ApiResponse::response(false, 400, 'get data by id gagal');
+      }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+
+//============================================UPDATE============================================
+    public function update($id)
     {
-        return request();
+      $rules = ['post_id' => 'required|numeric',
+                'user_id' => 'required|numeric',
+                'comment_text' => 'required|max:255'];
+
+      //validasi data
+      $validator = Validator::make(request()->all(), $rules);
+
+      //cek jika ada validasi yang gagal
+      if ($validator->fails())
+      {
+        return ApiResponse::response(false, 400, $validator->errors());
+      }
+
+      try {
+        Comment::where('id', $id)->update(request()->all());
+        return ApiResponse::response(true, 200, 'comment berhasil di update');
+
+      } catch (\Exception $e) {
+        return ApiResponse::response(false, 400, 'ups there is something wrong', $e);
+      }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+//============================================DESTROY============================================
     public function destroy($id)
     {
-      return $id;
+      try {
+        Comment::where('id', $id)->delete();
+        return ApiResponse::response(true, 200, 'delete berhasil');
+
+      } catch (\Exception $e) {
+        return ApiResponse::response(false, 400, 'ups there is something wrong', $e);
+      }
     }
 }
