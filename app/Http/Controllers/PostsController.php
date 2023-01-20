@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Comment;
+use App\Models\Post;
 use App\Helpers\ApiResponse;
 use Illuminate\Support\Facades\Validator;
 
-class CommentController extends Controller
+class PostsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,12 @@ class CommentController extends Controller
      */
     public function index()
     {
-        return 'get all';
+      try {
+        $postData = Post::get(['user_id','caption', 'post_date']);
+        return ApiResponse::response(true, 200, 'get all data berhasil', $postData);
+      } catch (\Exception $e) {
+        return ApiResponse::response(false, 400, 'get data gagal');
+      }
     }
 
     /**
@@ -27,13 +32,9 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-      $rules = ['username' => 'required|alpha|min:2|max:32',
-                'first_name' => 'required|alpha|min:2|max:16',
-                'last_name' => 'required|alpha|min:2|max:16',
-                'phone_number' => 'required|numeric|min_digits:10|max_digits:12',
-                'image_path' => '',
-                'date_of_birth' => '',
-                'password' => 'required|min:5'];
+      $rules = ['user_id' => 'required|numeric|max:5',
+                'caption' => 'required|max:100',
+                'post_date' => 'required'];
 
       //validasi data
       $validator = Validator::make($request->all(), $rules);
@@ -42,6 +43,14 @@ class CommentController extends Controller
       if ($validator->fails())
       {
         return ApiResponse::response(false, 400, $validator->errors());
+      }
+
+      try {
+        Post::create($request->all());
+        return ApiResponse::response(true, 200, 'postingan berhasil di tambahkan');
+
+      } catch (\Exception $e) {
+        return ApiResponse::response(false, 400, 'ups there is something wrong', $e);
       }
     }
 
@@ -53,7 +62,12 @@ class CommentController extends Controller
      */
     public function show($id)
     {
-        return 'get by id {'.$id.'}';
+      try {
+        $postData = Post::get(['user_id','caption', 'post_date'])->where('id', $id);
+        return ApiResponse::response(true, 200, 'get data by id berhasil', $postData);
+      } catch (\Exception $e) {
+        return ApiResponse::response(false, 400, 'get data by id gagal');
+      }
     }
 
     /**
@@ -65,7 +79,7 @@ class CommentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return request();
+        //
     }
 
     /**
@@ -76,6 +90,6 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-      return $id;
+        //
     }
 }

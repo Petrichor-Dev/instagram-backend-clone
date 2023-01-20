@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PostsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,8 +32,19 @@ Route::post('users/{id}', [UserController::class, 'get']);
 Route::patch('users/{id}', [UserController::class, 'update']);
 Route::delete('users/{id}', [UserController::class, 'delete']);
 
+//comments
+Route::post('comments/', [CommentController::class, 'store']);
+Route::get('comments/', [CommentController::class, 'index']);
+Route::get('comments/{id}', [CommentController::class, 'show']);
+Route::patch('comments/{id}', [CommentController::class, 'update']);
+Route::delete('comments/{id}', [CommentController::class, 'destroy']);
 
-
+//posts
+Route::post('posts/', [PostsController::class, 'store']);
+Route::get('posts/', [PostsController::class, 'index']);
+Route::get('posts/{id}', [PostsController::class, 'show']);
+Route::patch('posts/{id}', [PostsController::class, 'update']);
+Route::delete('posts/{id}', [PostsController::class, 'destroy']);
 
 
 
