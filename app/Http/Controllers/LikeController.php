@@ -3,61 +3,90 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Like;
+use App\Helpers\ApiResponse;
+use Illuminate\Support\Facades\Validator;
 
 class LikeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+      try {
+        $LikesData = Like::get(['id', 'user_id','post_id', 'created_at']);
+        return ApiResponse::response(true, 200, 'get all data berhasil', $LikesData);
+      } catch (\Exception $e) {
+        return ApiResponse::response(false, 400, 'get data gagal');
+      }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function store()
     {
-        //
+      $rules = ['post_id' => 'required|numeric',
+                'user_id' => 'required|numeric'];
+
+      //validasi data
+      $validator = Validator::make(request()->all(), $rules);
+
+      //cek jika ada validasi yang gagal
+      if ($validator->fails())
+      {
+        return ApiResponse::response(false, 400, $validator->errors());
+      }
+
+      try {
+        Like::create(request()->all());
+        return ApiResponse::response(true, 200, 'berhasil menambahkan like');
+
+      } catch (\Exception $e) {
+        return ApiResponse::response(false, 400, 'ups there is something wrong', $e);
+      }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
-        //
+      try {
+        $LikesData = Like::where('id', $id)->get(['id', 'user_id','post_id', 'created_at']);
+        return ApiResponse::response(true, 200, 'get data by id berhasil', $LikesData);
+      } catch (\Exception $e) {
+        return ApiResponse::response(false, 400, 'get data by id gagal');
+      }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+
+    public function update($id)
     {
-        //
+      $rules = ['post_id' => 'required|numeric',
+                'user_id' => 'required|numeric'];
+
+      //validasi data
+      $validator = Validator::make(request()->all(), $rules);
+
+      //cek jika ada validasi yang gagal
+      if ($validator->fails())
+      {
+        return ApiResponse::response(false, 400, $validator->errors());
+      }
+
+      try {
+        Like::where('id', $id)->update(request()->all());
+        return ApiResponse::response(true, 200, 'update berhasil');
+
+      } catch (\Exception $e) {
+        return ApiResponse::response(false, 400, 'ups there is something wrong', $e);
+      }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
-        //
+      try {
+        Like::where('id', $id)->delete();
+        return ApiResponse::response(true, 200, 'delete berhasil');
+      } catch (\Exception $e) {
+        return ApiResponse::response(false, 400, 'ups there is something wrong', $e);
+      }
     }
 }
