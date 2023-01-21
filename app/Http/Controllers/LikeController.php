@@ -13,8 +13,8 @@ class LikeController extends Controller
     public function index()
     {
       try {
-        $LikesData = Like::get(['id', 'user_id','post_id', 'created_at']);
-        return ApiResponse::response(true, 200, 'get all data berhasil', $LikesData);
+        $likesData = Like::get(['id', 'user_id','post_id', 'created_at']);
+        return ApiResponse::response(true, 200, 'get all data berhasil', $likesData);
       } catch (\Exception $e) {
         return ApiResponse::response(false, 400, 'get data gagal');
       }
@@ -48,8 +48,12 @@ class LikeController extends Controller
     public function show($id)
     {
       try {
-        $LikesData = Like::where('id', $id)->get(['id', 'user_id','post_id', 'created_at']);
-        return ApiResponse::response(true, 200, 'get data by id berhasil', $LikesData);
+        $likesData = Like::where('id', $id)->get(['id', 'user_id','post_id', 'created_at']);
+        if(!$likesData->isEmpty()){
+          return ApiResponse::response(true, 200, 'get data by id berhasil', $likesData);
+        } else {
+          return ApiResponse::response(false, 404, 'data tidak di temukan');
+        }
       } catch (\Exception $e) {
         return ApiResponse::response(false, 400, 'get data by id gagal');
       }

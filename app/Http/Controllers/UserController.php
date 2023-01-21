@@ -108,7 +108,11 @@ class UserController extends Controller
   {
     try {
       $usersData = User::where('id', $id)->get(['id', 'username','password', 'first_name', 'last_name', 'phone_number', 'image_path', 'date_of_birth', 'password']);
-      return ApiResponse::response(true, 200, 'get all data berhasil', $usersData);
+      if(!$usersData->isEmpty()){
+        return ApiResponse::response(true, 200, 'get data by id berhasil', $usersData);
+      } else {
+        return ApiResponse::response(false, 404, 'data tidak di temukan');
+      }
     } catch (\Exception $e) {
       return ApiResponse::response(false, 400, 'get data by id gagal');
     }

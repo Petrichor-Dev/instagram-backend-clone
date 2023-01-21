@@ -13,7 +13,7 @@ class PostsController extends Controller
     public function index()
     {
       try {
-        $postData = Post::get(['user_id','caption', 'post_date']);
+        $postData = Post::get(['id', 'user_id','caption', 'post_date']);
         return ApiResponse::response(true, 200, 'get all data berhasil', $postData);
       } catch (\Exception $e) {
         return ApiResponse::response(false, 400, 'get data gagal');
@@ -51,8 +51,12 @@ class PostsController extends Controller
     public function show($id)
     {
       try {
-        $postData = Post::where('id', $id)->get(['user_id','caption', 'post_date']);
-        return ApiResponse::response(true, 200, 'get data by id berhasil', $postData);
+        $postData = Post::where('id', $id)->get(['id', 'user_id','caption', 'post_date']);
+        if(!$postData->isEmpty()){
+          return ApiResponse::response(true, 200, 'get data by id berhasil', $postData);
+        } else {
+          return ApiResponse::response(false, 404, 'data tidak di temukan');
+        }
       } catch (\Exception $e) {
         return ApiResponse::response(false, 400, 'get data by id gagal');
       }

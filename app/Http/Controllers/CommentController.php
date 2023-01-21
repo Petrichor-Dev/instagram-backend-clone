@@ -15,8 +15,8 @@ class CommentController extends Controller
     public function index()
     {
       try {
-        $postData = Comment::get(['id', 'user_id','post_id', 'comment_text']);
-        return ApiResponse::response(true, 200, 'get all data berhasil', $postData);
+        $commentData = Comment::get(['id', 'user_id','post_id', 'comment_text']);
+        return ApiResponse::response(true, 200, 'get all data berhasil', $commentData);
       } catch (\Exception $e) {
         return ApiResponse::response(false, 400, 'get data gagal');
       }
@@ -55,8 +55,12 @@ class CommentController extends Controller
 
       //bisa get by id comment, get by id post, atau get by id user
       try {
-        $postData = Comment::where('id', $id)->get(['id', 'user_id','post_id', 'comment_text']);
-        return ApiResponse::response(true, 200, 'get data by id berhasil', $postData);
+        $commentData = Comment::where('id', $id)->get(['id', 'user_id','post_id', 'comment_text']);
+        if(!$commentData->isEmpty()){
+          return ApiResponse::response(true, 200, 'get data by id berhasil', $commentData);
+        } else {
+          return ApiResponse::response(false, 404, 'data tidak di temukan');
+        }
       } catch (\Exception $e) {
         return ApiResponse::response(false, 400, 'get data by id gagal');
       }
