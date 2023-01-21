@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 class FollowersController extends Controller
 {
 
+//============================================INDEX============================================
     public function index()
     {
       try {
@@ -21,6 +22,7 @@ class FollowersController extends Controller
     }
 
 
+//============================================STORE============================================
     public function store()
     {
       $rules = ['follower_id' => 'required|numeric',
@@ -45,6 +47,7 @@ class FollowersController extends Controller
     }
 
 
+//============================================SHOW============================================
     public function show($id)
     {
       try {
@@ -60,6 +63,7 @@ class FollowersController extends Controller
     }
 
 
+//============================================UPDATE============================================
     public function update($id)
     {
       $rules = ['follower_id' => 'required|numeric',
@@ -84,6 +88,7 @@ class FollowersController extends Controller
     }
 
 
+//============================================DESTROY============================================
     public function destroy($id)
     {
       try {
