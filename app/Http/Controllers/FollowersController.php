@@ -13,6 +13,16 @@ class FollowersController extends Controller
 //============================================INDEX============================================
     public function index()
     {
+      $userinput = request()->getContent();
+      $toArray = explode('&', $userinput);
+      foreach ($toArray as $toArr) {
+        $arr1[] = explode('=', $toArr);
+        $arr2 = [];
+        foreach ($arr1 as $a1 ) {
+          $arr2[$a1[0]] = $a1[1];
+        }
+      };
+      
       try {
         $followerData = Follower::get(['id', 'follower_id', 'following_id', 'created_at']);
         return ApiResponse::response(true, 200, 'get all data berhasil', $followerData);
@@ -50,6 +60,16 @@ class FollowersController extends Controller
 //============================================SHOW============================================
     public function show($id)
     {
+      $userinput = request()->getContent();
+      $toArray = explode('&', $userinput);
+      foreach ($toArray as $toArr) {
+        $arr1[] = explode('=', $toArr);
+        $arr2 = [];
+        foreach ($arr1 as $a1 ) {
+          $arr2[$a1[0]] = $a1[1];
+        }
+      };
+
       try {
         $followerData = Follower::where('id', $id)->get(['id', 'follower_id', 'following_id', 'created_at']);
         if(!$followerData->isEmpty()){
