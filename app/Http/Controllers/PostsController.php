@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\ImagePost;
 use App\Helpers\ApiResponse;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,11 +23,12 @@ class PostsController extends Controller
 
 
 //============================================STORE============================================
-    public function store()
+    public function store(Request $request)
     {
+      // return $request->all();
       $rules = ['user_id' => 'required|numeric|max:5',
-                'caption' => 'required|max:100',
-                'post_date' => 'required'];
+                'caption' => 'max:100',
+                'image_name' => 'required|image'];
 
       //validasi data
       $validator = Validator::make(request()->all(), $rules);
@@ -37,12 +39,29 @@ class PostsController extends Controller
         return ApiResponse::response(false, 400, $validator->errors());
       }
 
-      try {
-        Post::create(request()->all());
-        return ApiResponse::response(true, 200, 'postingan berhasil di tambahkan');
+      if($request->hasFile('image_name'))
+      {
+        $image = $request->file('image_name');
+        $image_name = $image->getClientOriginalName();
+        $image->storePubliclyAs('imagePost', $image_name, 'public');
 
-      } catch (\Exception $e) {
-        return ApiResponse::response(false, 400, 'ups there is something wrong', $e);
+        try {
+
+          Post::create($request->all());
+          $post_data = Post::latest()->first();
+          $image_data = [
+            'post_id' => $post_data->id,
+            'image_name' => $image_name
+            ];
+            
+          ImagePost::create($image_data);
+          return ApiResponse::response(true, 200, 'postingan berhasil di tambahkan');
+
+        } catch (\Exception $e) {
+          return ApiResponse::response(false, 400, 'ups there is something wrong', $e);
+        }
+      } else {
+        return ApiResponse::response(false, 400, 'ups there is something wrong with image upload', $e);
       }
     }
 
@@ -66,8 +85,7 @@ class PostsController extends Controller
 //============================================UPDATE============================================
     public function update($id)
     {
-      $rules = ['caption' => 'max:100',
-                'post_date' => 'date_format:Y-m-d'];
+      $rules = ['caption' => 'max:100'];
 
       //validasi data
       $validator = Validator::make(request()->all(), $rules);

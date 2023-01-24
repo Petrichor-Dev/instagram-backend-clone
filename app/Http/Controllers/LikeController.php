@@ -15,7 +15,11 @@ class LikeController extends Controller
     {
       try {
         $likesData = Like::get(['id', 'user_id','post_id', 'created_at']);
-        return ApiResponse::response(true, 200, 'get all data berhasil', $likesData);
+        if(!$likesData->isEmpty()){
+          return ApiResponse::response(true, 200, 'get all data berhasil', $likesData);
+        } else {
+          return ApiResponse::response(true, 200, 'get all data berhasil - [data masih kosong]', $likesData);
+        }
       } catch (\Exception $e) {
         return ApiResponse::response(false, 400, 'get data gagal');
       }

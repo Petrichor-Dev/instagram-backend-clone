@@ -10,22 +10,6 @@ use App\Http\Controllers\LikeController;
 use App\Helpers\ApiResponse;
 
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
 // registrasi
 Route::post('signin', [UserController::class, 'signin']);
 Route::post('signup', [UserController::class, 'signup']);
@@ -64,10 +48,12 @@ Route::get('likes/{id}', [LikeController::class, 'show']);
 Route::patch('likes/{id}', [LikeController::class, 'update']);
 Route::delete('likes/{id}', [LikeController::class, 'destroy']);
 
-// Route:fallback(function () {
-//   return ApiResponse::response(false, 404, '404 | Endpoint Not Found');
-// });
 
+// image post
+//  -image_id
+//  -post_id
+//  -image_name
+//  -image_order
 
 
 
