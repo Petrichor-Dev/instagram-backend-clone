@@ -49,12 +49,6 @@ Route::patch('likes/{id}', [LikeController::class, 'update']);
 Route::delete('likes/{id}', [LikeController::class, 'destroy']);
 
 
-// image post
-//  -image_id
-//  -post_id
-//  -image_name
-//  -image_order
-
 
 
 
