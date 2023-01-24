@@ -22,7 +22,7 @@ class FollowersController extends Controller
           $arr2[$a1[0]] = $a1[1];
         }
       };
-      
+
       try {
         $followerData = Follower::get(['id', 'follower_id', 'following_id', 'created_at']);
         return ApiResponse::response(true, 200, 'get all data berhasil', $followerData);
@@ -79,31 +79,6 @@ class FollowersController extends Controller
         }
       } catch (\Exception $e) {
         return ApiResponse::response(false, 400, 'get data by id gagal');
-      }
-    }
-
-
-//============================================UPDATE============================================
-    public function update($id)
-    {
-      $rules = ['follower_id' => 'required|numeric',
-                'following_id' => 'required|numeric'];
-
-      //validasi data
-      $validator = Validator::make(request()->all(), $rules);
-
-      //cek jika ada validasi yang gagal
-      if ($validator->fails())
-      {
-        return ApiResponse::response(false, 400, $validator->errors());
-      }
-
-      try {
-        Follower::where('id', $id)->update(request()->all());
-        return ApiResponse::response(true, 200, 'update berhasil');
-
-      } catch (\Exception $e) {
-        return ApiResponse::response(false, 400, 'ups there is something wrong', $e);
       }
     }
 

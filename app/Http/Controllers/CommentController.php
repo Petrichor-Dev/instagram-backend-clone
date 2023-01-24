@@ -12,7 +12,7 @@ class CommentController extends Controller
 
 
 //============================================INDEX============================================
-    public function index()
+    public function index(Request $request)
     {
       try {
         $commentData = Comment::get(['id', 'user_id','post_id', 'comment_text']);

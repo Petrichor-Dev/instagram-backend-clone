@@ -7,6 +7,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\FollowersController;
 use App\Http\Controllers\LikeController;
+use App\Helpers\ApiResponse;
 
 
 /*
@@ -63,7 +64,9 @@ Route::get('likes/{id}', [LikeController::class, 'show']);
 Route::patch('likes/{id}', [LikeController::class, 'update']);
 Route::delete('likes/{id}', [LikeController::class, 'destroy']);
 
-
+// Route:fallback(function () {
+//   return ApiResponse::response(false, 404, '404 | Endpoint Not Found');
+// });
 
 
 

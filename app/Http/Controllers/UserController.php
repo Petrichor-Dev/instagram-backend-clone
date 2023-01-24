@@ -16,6 +16,7 @@ class UserController extends Controller
 //============================================SIGNUP============================================
   public function signup()
   {
+    $request = request();
     $rules = ['username' => 'required|alpha|min:2|max:32',
               'first_name' => 'required|alpha|min:2|max:16',
               'last_name' => 'required|alpha|min:2|max:16',
@@ -58,6 +59,7 @@ class UserController extends Controller
 //============================================SIGNIN============================================
   public function signin()
   {
+    $request = request();
     $rules = ['username' => 'required|alpha_dash|min:2|max:32',
               'password' => 'required|min:5'];
 
